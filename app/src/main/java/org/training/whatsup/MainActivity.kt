@@ -1,6 +1,7 @@
 package org.training.whatsup
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        Toast.makeText(this, "Welcome to WhatsUP!!", Toast.LENGTH_LONG).show()
     }
 }
 
