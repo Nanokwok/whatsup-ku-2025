@@ -1,5 +1,6 @@
 package org.training.whatsup
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -37,6 +38,9 @@ class LogInVeiwActivity : AppCompatActivity() {
                 usernameTxt.setText("")
                 pwdTxt.setText("")
                 signInPanel.visibility = View.GONE
+
+                val i = Intent(this, MainActivity::class.java)
+                startActivity(i)
             }
             else Toast.makeText(this, "Please Try Again", Toast.LENGTH_LONG).show()
         }
