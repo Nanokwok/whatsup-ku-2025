@@ -70,10 +70,16 @@ fun MainScreenWithBottomNavBar() {
             }
         }
     } ) {paddingValues -> NavHost(navController,
-        startDestination = DestinationScreen.NearMe.route,
+        startDestination = DestinationScreen.Highlight.route,
         modifier = Modifier.padding(paddingValues)) {
+            composable(route = DestinationScreen.Highlight.route) {
+                HighlightScreen()
+            }
             composable(route = DestinationScreen.NearMe.route) {
                 NearMeScreen()
+            }
+            composable(route = DestinationScreen.MyEvents.route) {
+                MyEventsScreen()
             }
         }
     }
