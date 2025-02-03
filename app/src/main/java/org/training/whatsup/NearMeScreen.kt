@@ -1,5 +1,6 @@
 package org.training.whatsup
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,16 +24,41 @@ import org.training.whatsup.ui.theme.WhatsUpTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
-import kotlin.contracts.contract
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 
 @Composable
 fun NearMeScreen() {
     val screenContext = LocalContext.current
     val locationProvider = LocationServices.getFusedLocationProviderClient(screenContext)
+
+    var latValue:Double? by remember { mutableStateOf(0.0) }
+    var lonValue:Double? by remember { mutableStateOf(0.0) }
+
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            super.onLocationResult(p0)
+            latValue = p0.lastLocation?.latitude
+            lonValue = p0.lastLocation?.longitude
+        }
+    }
+
     val permissionDialog = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean -> /*Get user location*/ }
+        onResult = { isGranted: Boolean ->
+            if (isGranted) {
+                /*Get user location*/
+                getCurrentUserLocation(locationProvider, locationCallback)
+            }
+        }
     )
 
     DisposableEffect(key1 = locationProvider) {
@@ -42,12 +68,14 @@ fun NearMeScreen() {
         )
         if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
             /*Get user location*/
+            getCurrentUserLocation(locationProvider, locationCallback)
         }
         else {
             permissionDialog.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
         onDispose {
             // remove observer if any
+            locationProvider.removeLocationUpdates(locationCallback)
         }
     }
 
@@ -61,7 +89,7 @@ fun NearMeScreen() {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Events Near Me")
-                LocationCoordinateDisplay(lat = "0.0", lon = "0.0")
+                LocationCoordinateDisplay(lat = latValue.toString(), lon = lonValue.toString())
             }
         }
     }
@@ -72,9 +100,20 @@ fun NearMeScreen() {
 fun NearMeScreenPreview() {
     NearMeScreen()
 }
+
+@SuppressLint("MissingPermission")
+private fun getCurrentUserLocation(locationProvider: FusedLocationProviderClient,
+                                   locationCb: LocationCallback)
+{
+    val locationReq = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).build()
+    locationProvider.requestLocationUpdates(locationReq, locationCb, null)
+}
+
 @Composable
 fun LocationCoordinateDisplay( lat:String, lon:String ) {
-    ConstraintLayout ( modifier = Modifier.fillMaxSize(1f).padding(all = 8.dp) ) {
+    ConstraintLayout ( modifier = Modifier
+        .fillMaxSize(1f)
+        .padding(all = 8.dp) ) {
         val (goBtn, latField, lonField) = createRefs()
         Button( onClick = { /*TODO*/ }, modifier = Modifier.constrainAs(goBtn){
             top.linkTo(parent.top, margin = 8.dp)
