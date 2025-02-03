@@ -1,5 +1,6 @@
 package org.training.whatsup
 
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,14 +13,44 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.google.android.gms.location.LocationServices
 import org.training.whatsup.ui.theme.WhatsUpTheme
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.DisposableEffect
+import androidx.core.content.ContextCompat
+import kotlin.contracts.contract
 
 @Composable
 fun NearMeScreen() {
+    val screenContext = LocalContext.current
+    val locationProvider = LocationServices.getFusedLocationProviderClient(screenContext)
+    val permissionDialog = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean -> /*Get user location*/ }
+    )
+
+    DisposableEffect(key1 = locationProvider) {
+        val permissionStatus = ContextCompat.checkSelfPermission(
+            screenContext,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+            /*Get user location*/
+        }
+        else {
+            permissionDialog.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+        onDispose {
+            // remove observer if any
+        }
+    }
+
     WhatsUpTheme {
         Surface(
             modifier = Modifier
