@@ -40,6 +40,7 @@ class LogInVeiwActivity : AppCompatActivity() {
                 signInPanel.visibility = View.GONE
 
                 val i = Intent(this, MainActivity::class.java)
+                i.putExtra("loginUsername", username)
                 startActivity(i)
             }
             else Toast.makeText(this, "Please Try Again", Toast.LENGTH_LONG).show()

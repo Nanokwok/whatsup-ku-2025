@@ -47,7 +47,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        Toast.makeText(this, "Welcome to WhatsUP!!", Toast.LENGTH_LONG).show()
+        val i = intent
+        val username = i.getStringExtra("loginUsername")
+        Toast.makeText(this, "Welcome $username to WhatsUP!!", Toast.LENGTH_LONG).show()
     }
 }
 
