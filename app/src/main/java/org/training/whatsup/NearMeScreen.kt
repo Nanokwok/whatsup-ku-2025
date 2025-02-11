@@ -23,7 +23,9 @@ import com.google.android.gms.location.LocationServices
 import org.training.whatsup.ui.theme.WhatsUpTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +36,18 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.ktx.model.cameraPosition
 
 @Composable
 fun NearMeScreen() {
@@ -90,8 +104,36 @@ fun NearMeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Events Near Me")
                 LocationCoordinateDisplay(lat = latValue.toString(), lon = lonValue.toString())
+//                mapDisplay()
+                if(latValue!=null && lonValue!=null)
+                    mapDisplay(lat = latValue!!, lon = lonValue!!)
+                else
+                    mapDisplay()
             }
         }
+    }
+}
+
+@Composable
+fun rememberMarkerState(markerPosition: LatLng) : MarkerState {
+    return remember { MarkerState(position = markerPosition) }.apply { position = markerPosition }
+}
+
+@Composable
+fun mapDisplay(lat: Double = 13.74466, lon: Double = 100.53291, zoomLevel: Float = 13f, mapType: MapType = MapType.NORMAL) {
+    val location = LatLng(lat, lon)
+    val cameraState = rememberCameraPositionState()
+//        position = CameraPosition.fromLatLngZoom(location, zoomLevel)
+//        }
+        LaunchedEffect (key1 = location) {
+            cameraState.centerOnLocation(location)
+    }
+
+    GoogleMap(modifier = Modifier.fillMaxSize(),
+        properties = MapProperties(mapType = mapType),
+        cameraPositionState = cameraState){
+        Marker(state = rememberMarkerState(location),
+            title = "You are Here", snippet = "Your Location")
     }
 }
 
@@ -109,10 +151,18 @@ private fun getCurrentUserLocation(locationProvider: FusedLocationProviderClient
     locationProvider.requestLocationUpdates(locationReq, locationCb, null)
 }
 
+private suspend fun CameraPositionState.centerOnLocation(location: LatLng) = animate(
+    update = CameraUpdateFactory.newLatLngZoom(
+        location,
+        13f
+    ),
+    durationMs = 1500
+)
+
 @Composable
 fun LocationCoordinateDisplay( lat:String, lon:String ) {
     ConstraintLayout ( modifier = Modifier
-        .fillMaxSize(1f)
+        .fillMaxWidth(1f)
         .padding(all = 8.dp) ) {
         val (goBtn, latField, lonField) = createRefs()
         Button( onClick = { /*TODO*/ }, modifier = Modifier.constrainAs(goBtn){

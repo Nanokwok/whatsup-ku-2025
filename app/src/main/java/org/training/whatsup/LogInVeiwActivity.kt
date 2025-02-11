@@ -2,6 +2,7 @@ package org.training.whatsup
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,7 +16,10 @@ import androidx.core.view.WindowInsetsCompat
 class LogInVeiwActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
+        val mapApiKey = BuildConfig.MAPS_API_KEY
+        Log.i("MAPS_API_KEY", "MAPS_API_KEY = $mapApiKey")
+
+        enableEdgeToEdge()
         setContentView(R.layout.activity_log_in_veiw)
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
 //            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
