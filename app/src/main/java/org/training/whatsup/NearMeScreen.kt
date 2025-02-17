@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.google.android.gms.location.LocationServices
-import org.training.whatsup.ui.theme.WhatsUpTheme
+//import org.training.whatsup.ui.theme.WhatsUpTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,6 +48,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.ktx.model.cameraPosition
+import org.training.whatsup.customui.theme.AppTheme
 
 @Composable
 fun NearMeScreen() {
@@ -93,7 +94,7 @@ fun NearMeScreen() {
         }
     }
 
-    WhatsUpTheme {
+    AppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize()

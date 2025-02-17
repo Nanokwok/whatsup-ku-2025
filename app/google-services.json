@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026085436300",
+    "project_id": "annular-primer-450608-m2",
+    "storage_bucket": "annular-primer-450608-m2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026085436300:android:6931e7346089db4e28f4a9",
+        "android_client_info": {
+          "package_name": "org.training.whatsup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbhhURPPwgc1VM-lFwbAfa5OEWgWcm7yk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

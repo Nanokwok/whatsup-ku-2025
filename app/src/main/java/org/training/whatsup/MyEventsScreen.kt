@@ -12,12 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.training.whatsup.ui.theme.WhatsUpTheme
+//import org.training.whatsup.ui.theme.WhatsUpTheme
 import androidx.compose.material3.Text
+import org.training.whatsup.customui.theme.AppTheme
 
 @Composable
 fun MyEventsScreen() {
-    WhatsUpTheme {
+    AppTheme {
         Surface(
             modifier = Modifier
                 .fillMaxSize()

@@ -29,14 +29,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.training.whatsup.ui.theme.WhatsUpTheme
+import org.training.whatsup.customui.theme.AppTheme
+//import org.training.whatsup.ui.theme.WhatsUpTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
         setContent {
-            WhatsUpTheme {
+            AppTheme {
                 Surface (
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background) {
@@ -107,7 +108,7 @@ fun MainScreenWithBottomNavBar() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    WhatsUpTheme {
+    AppTheme {
         MainScreenWithBottomNavBar()
     }
 }
